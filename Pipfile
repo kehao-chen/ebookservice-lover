@@ -8,6 +8,7 @@ name = "pypi"
 [packages]
 
 requests = "*"
+aiohttp = "*"
 
 
 [dev-packages]
