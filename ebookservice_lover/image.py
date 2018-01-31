@@ -15,15 +15,16 @@ import ebookservice_lover.utils as utils
 COMMON_IMAGE_EXTENSIONS = ["jpg", "png"]
 
 
-def download_consecutive_numbered_images(
+async def download_consecutive_numbered_images(
+        event_loop: asyncio.AbstractEventLoop,
         format_url: str,
         out_dir: str,
         start_number: int = 1,
         stop_number: int = -1,
         file_name_replacement_field: str = "{:03}",
-        progress_coroutine: Callable = None) -> bool:
+        progress_coroutine: callable = None):
     """
-
+    :param event_loop:
     :param format_url:
     :param out_dir:
     :param start_number:
@@ -46,7 +47,7 @@ def download_consecutive_numbered_images(
     if progress_coroutine is None:
         progress_coroutine = asyncio.wait
 
-    with closing(asyncio.get_event_loop()) as loop, closing(aiohttp.ClientSession()) as session:
+    async with aiohttp.ClientSession(loop=event_loop) as session:
         semaphore = asyncio.Semaphore(16)
         futures = []
         for i in range(start_number, stop_number):
@@ -55,9 +56,7 @@ def download_consecutive_numbered_images(
             file_path = os.path.join(out_dir, file_name)
             download_task = asyncio.ensure_future(utils.download_file(download_url, semaphore, session, file_path))
             futures.append(download_task)
-        loop.run_until_complete(progress_coroutine(futures))
-
-    return True
+        await progress_coroutine(futures)
 
 
 async def basic_progress_coroutine(tasks: Iterable) -> None:
