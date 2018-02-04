@@ -92,6 +92,8 @@ def _fetch_stop_number(format_url: str, start_number: int, steps: int = 100) -> 
     if h.status_code == requests.codes.ok:
         if steps < 0:
             steps = (steps * -1) // 2
+        if steps == 0:
+            steps += 1
     else:
         if steps == 1:
             return stop_number
