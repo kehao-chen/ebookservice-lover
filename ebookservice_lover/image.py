@@ -147,8 +147,8 @@ def compress_images_to_zip_format(source_dir: str, zip_name: str, zip_ext: str =
     with zipfile.ZipFile("{}.{}".format(zip_name, zip_ext), mode="w") as zip_file:
         for root, _, files in os.walk(source_dir):
             for file in files:
-                _, file_ext = os.path.split(file)
-                if file_ext.lower() in COMMON_IMAGE_EXTENSIONS:
+                _, file_ext = os.path.splitext(file)
+                if file_ext.lower().replace(".", "") in COMMON_IMAGE_EXTENSIONS:
                     file_path = os.path.join(root, file)
                     zip_file.write(file_path, file)
     return True
