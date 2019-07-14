@@ -22,7 +22,7 @@ def main(format_url: str, out_dir="out"):
 
 
 if __name__ == '__main__':
-    with open("sample.csv", encoding="utf8") as csv_file:
+    with open("image_samples.csv", encoding="utf8") as csv_file:
         for row in csv.reader(csv_file):
             if len(row) == 2:
                 file_name = row[0]

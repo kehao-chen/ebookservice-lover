@@ -3,8 +3,15 @@
 """
 import aiohttp
 import asyncio
+import requests
 
 CHUNK_SIZE = 1024
+
+
+def simple_download_file(file_url: str, file_name: str):
+    r = requests.get(file_url)
+    with open(file_name, 'wb') as f:
+        f.write(r.content)
 
 
 async def download_file(
